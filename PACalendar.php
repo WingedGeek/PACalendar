@@ -70,8 +70,49 @@ class PACalendar {
      * Adds or subtracts the specified amount of time to the given calendar field
      */
     public function add( int $field, int $amount ):void {
+    	// Special case for if this day of the month is > the last day of the next month;
+    	// last day of the month; 1/31/2022 + 1 month comes back with 3/3/2022
+    	// using the interval add. 
+    	//	If today = lastDayOfMonth, add one day (roll into next month) and then
+    	//		set DAY to lastDayOfMonth for the new month.
+
+		//	Start 1/31/2022.
+		//		Roll 7 days forward, determine new month.
+		//		while $i < $number_of_months
+		//			use interval to add another MONTH
+		//		then, if $this->day > lastDayOfMonth, set to lastDayOfMonth
+    	if(($field == SELF::MONTH) && ($this->get( SELF::DAY) > 27)) {
+			$t = $this->clone();
+			$starting_day = $this->get(SELF::DAY);
+			
+			$direction = ($amount > 0) ? 1 : -1;
+			print $direction . "\n";
+			
+			$initial_offset = ($amount > 0) ? 7 : (($starting_day + 7) * -1);
+			
+			$this->add( SELF::DAY, $initial_offset );	// Takes us into the next month
+			for($i = 0; $i < abs($amount) - 1; $i++) {
+				$interval = $this->buildInterval( $field, 1 );
+				if( $direction > 0) {
+					$this->DTO->add( $interval );
+				} else {
+					$this->DTO->sub( $interval );
+				}
+			}
+			// Here, we should be in the right month; now, massage the date if necessary
+			if($starting_day > $this->getLastDayOfMonth() ) {
+				$this->set( SELF::DAY, $this->getLastDayOfMonth() );
+			} else {
+				$this->set( SELF::DAY, $starting_day );
+			}
+			return;
+    	}
+    	// End special case
+    	//print "Got here...\n";
+    	
         $interval = $this->buildInterval( $field, abs($amount) );
-        
+		// print_r($interval);
+		       
         if($amount < 0) {
             $this->DTO->sub( $interval );
         } else {
@@ -281,6 +322,17 @@ class PACalendar {
         $cal = new PACalendar();
         $cal->setTimezone( new DateTimeZone( $dtz ) );
         return $cal;
+    }
+    
+    public function getLastDayOfMonth():int {
+		return $this->getMaximum( SELF::DAY );
+//     	if($month > -1) {
+//     		$tpac = new PACalendar();
+//     		$tpac->set( SELF::MONTH, $month );
+//     		return $tpac->getMaximum( SELF::DAY );
+//     	} else {
+//     		return $this->getMaximum( SELF::DAY );
+//     	}
     }
     
     //static Calendar 	getInstance(TimeZone zone, Locale aLocale)
