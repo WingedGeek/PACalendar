@@ -145,65 +145,57 @@ class PACalendarTest extends TestCase {
 		$c = PACalendar::parse("1/31/1977");
 		$d = PACalendar::parse("1/20/2022");
 		//$cd = PACalendar::calculateDuration($c, $d, PACalendar::YEAR, PACalendar::DAY);
-		$diff = PACalendar::getDifferenceBetween( $c, $d );
+		$interval = PACalendar::getDifferenceBetween( $c, $d );
 		
-		$this->assertEquals(44, $diff->y );
- 		$this->assertEquals(11, $diff->m );
- 		$this->assertEquals(20, $diff->d );
-// 		//	 Or 539 months, 20 days
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::MONTH, PACalendar::DAY);
-// 		$this->assertEquals(539, $cd->get(Calendar::MONTH));
-// 		$this->assertEquals(20, $cd->get(Calendar::DAY));
+		$this->assertEquals(44, $interval->y );
+ 		$this->assertEquals(11, $interval->m );
+ 		$this->assertEquals(20, $interval->d );
 // 		//	 Or 16,425 days:
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::DAY, PACalendar::DAY);
-// 		$this->assertEquals(16425, $cd->get(Calendar::DAY));
+		$this->assertEquals("16425", $interval->format("%a"));
 
 		// 	1/20/2022	to	12/25/2022	11 months, 5 days (339 days)
  		$c = PACalendar::parse("1/20/2022");
  		$d = PACalendar::parse("12/25/2022");
-		$diff = PACalendar::getDifferenceBetween( $c, $d );
- 		$this->assertEquals(0, $diff->y );
- 		$this->assertEquals(11, $diff->m );
- 		$this->assertEquals(5, $diff->d );
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::DAY, PACalendar::DAY);
-// 		$this->assertEquals(339, $cd->get(Calendar::DAY));
-		
+		$interval = PACalendar::getDifferenceBetween( $c, $d );
+ 		$this->assertEquals(0, $interval->y );
+ 		$this->assertEquals(11, $interval->m );
+ 		$this->assertEquals(5, $interval->d );
+		$this->assertEquals("339", $interval->format("%a"));
+
 		//	1/20/2022	to	1/31/2027	5 years, 11 days	60 months, 11 days	1837 days
-// 		$c = PACalendar::parse("1/20/2022");
-// 		$d = PACalendar::parse("1/31/2027");
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::YEAR, PACalendar::DAY);
-// 		$this->assertEquals(5, $cd->get(Calendar::YEAR));
-// 		$this->assertEquals(0, $cd->get(Calendar::MONTH));
-// 		$this->assertEquals(11, $cd->get(Calendar::DAY));
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::DAY, PACalendar::DAY);
-// 		$this->assertEquals(1837, $cd->get(Calendar::DAY));
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::MONTH, PACalendar::DAY);
-// 		$this->assertEquals(60, $cd->get(Calendar::MONTH));
-// 		$this->assertEquals(11, $cd->get(Calendar::DAY));
+		$c = PACalendar::parse("1/20/2022");
+		$d = PACalendar::parse("1/31/2027");
+		$interval = PACalendar::getDifferenceBetween( $c, $d );
+		$this->assertEquals(5, $interval->y );
+		$this->assertEquals(0, $interval->m );
+		$this->assertEquals(11, $interval->d );
+ 		$this->assertEquals("1837", $interval->format("%a"));
 
 		// 2/1/2020 -> 3/1/2020 = 29 days (leap year)
-// 		$c = PACalendar::parse("2/1/2020");
-// 		$d = PACalendar::parse("3/1/2020");
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::DAY, PACalendar::DAY);
-// 		$this->assertEquals(29, $cd->get(Calendar::DAY));
+		$c = PACalendar::parse("2/1/2020");
+		$d = PACalendar::parse("3/1/2020");
+		$interval = PACalendar::getDifferenceBetween( $c, $d );
+ 		$this->assertEquals(1, $interval->m );
+ 		$this->assertEquals(0, $interval->d );
+		$this->assertEquals("29", $interval->format("%a"));
 
 		// 2/1/2021 -> 3/1/2021 = 28 days (non-leap year)
-// 		$c = PACalendar::parse("2/1/2021");
-// 		$d = PACalendar::parse("3/1/2021");
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::DAY, PACalendar::DAY);
-// 		$this->assertEquals(28, $cd->get(Calendar::DAY));
+		$c = PACalendar::parse("2/1/2021");
+		$d = PACalendar::parse("3/1/2021");
+		$interval = PACalendar::getDifferenceBetween( $c, $d );
+		$this->assertEquals("28", $interval->format("%a") );
 
 		// 2/1/2000 -> 3/1/2000 = 29 days (leap year)
-// 		$c = PACalendar::parse("2/1/2000");
-// 		$d = PACalendar::parse("3/1/2000");
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::DAY, PACalendar::DAY);
-// 		$this->assertEquals(29, $cd->get(Calendar::DAY));
+		$c = PACalendar::parse("2/1/2000");
+		$d = PACalendar::parse("3/1/2000");
+		$interval = PACalendar::getDifferenceBetween( $c, $d );
+		$this->assertEquals("29", $interval->format("%a"));
 
 		// 2/1/1900 -> 3/1/1900 = 28 days (non-leap year)
-// 		$c = PACalendar::parse("2/1/1900");
-// 		$d = PACalendar::parse("3/1/1900");
-// 		$cd = PACalendar::calculateDuration($c, $d, PACalendar::DAY, PACalendar::DAY);
-// 		$this->assertEquals(28, $cd->get(Calendar::DAY));
+		$c = PACalendar::parse("2/1/1900");
+		$d = PACalendar::parse("3/1/1900");
+		$interval = PACalendar::getDifferenceBetween( $c, $d );
+		$this->assertEquals("28", $interval->format("%a") );
 	}
 }
 ?>
