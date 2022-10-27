@@ -526,7 +526,7 @@ class PACalendar {
 	 *
 	 * @return int 0 if equal, < 0 if $this before $obj, > 0 if $this after $obj
 	 */
-	public function compareToDate( Calendar $obj ):int {
+	public function compareToDate( PACalendar $obj ):int {
 		// Compare two Calendar objects looking only at Year/Month/Day
 		$a = (int)$this->toString("Ymd");
 		$b = (int)$obj->toString("Ymd");
@@ -542,7 +542,7 @@ class PACalendar {
 	 *
 	 * @return bool True if the same date
 	 */
-	public function equalsDate( Calendar $obj ):bool {
+	public function equalsDate( PACalendar $obj ):bool {
 		return ! $this->compareToDate( $obj );
 	}
 	
@@ -553,7 +553,7 @@ class PACalendar {
 	 *
 	 * @return bool True if $this is after $obj
 	 */
-	public function afterDate( Calendar $obj ):bool {
+	public function afterDate( PACalendar $obj ):bool {
 		if($this->compareToDate( $obj ) > 0 ) {
 			return true;
 		}
@@ -567,7 +567,7 @@ class PACalendar {
 	 *
 	 * @return bool True if $this is before $obj
 	 */
-	public function beforeDate( Calendar $obj ):bool {
+	public function beforeDate( PACalendar $obj ):bool {
 		if($this->compareToDate( $obj ) < 0 ) {
 			return true;
 		}
